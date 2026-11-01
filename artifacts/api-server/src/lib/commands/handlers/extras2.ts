@@ -309,7 +309,7 @@ export const extras2Commands: Command[] = [
     name: "reels",
     category: "DOWNLOAD",
     desc: "Download an Instagram reel",
-    aliases: ["story", "ig", "instagram"],
+    aliases: ["story"],
     handler: async (ctx) => {
       const url = ctx.text.trim();
       if (!/^https?:\/\/(www\.)?(instagram\.com|instagr\.am|ig\.me)\//i.test(url)) return ctx.reply("❌ Send an Instagram link.");

@@ -21,6 +21,32 @@ Find your problem, then try the fix.
 | `403` when pushing to GitHub | Wrong password | Use a **token** as the password, with the `repo` box ticked |
 | Push says `fetch first` | The GitHub repo already has files | Pull first, or use a new empty repo |
 
+## 🎵 Downloader problems (YouTube, TikTok, Instagram)
+
+| Problem | Likely cause | Fix |
+|---|---|---|
+| YouTube says "not available" or "Sign in to confirm you are not a bot" | yt-dlp is old, or your host IP is blocked | Update yt-dlp (see below). Then try `YTDLP_COOKIES_FILE` or `YTDLP_PROXY` |
+| Every YouTube link fails after it worked before | YouTube changed something | Update yt-dlp. It must be version **2025.11.12 or newer** |
+| Instagram says "login required" or "rate limit" | Instagram only shows most posts to logged-in users | Set `YTDLP_COOKIES_FILE` (see below) |
+| TikTok does not download | The free tikwm service is down or busy | The bot tries yt-dlp automatically. Try again later |
+| Audio says "something is wrong with the audio file" | ffmpeg is missing | See step 5 in the [deploy guide](DEPLOY.md) |
+| `.play` song name works but option **2** (video) does not | Video by song name is not supported | Send a **link**, then choose 2 |
+| Video is "too large" | The limit is 64 MB for video and 50 MB for audio | Pick a shorter or smaller video |
+
+**Update yt-dlp** (run on your server, then restart the bot):
+
+```bash
+curl -L https://github.com/yt-dlp/yt-dlp/releases/latest/download/yt-dlp_linux \
+  -o artifacts/api-server/bin/yt-dlp
+chmod +x artifacts/api-server/bin/yt-dlp
+```
+
+**Use cookies for Instagram or YouTube:**
+1. Use a **spare account**, never your main one.
+2. Log in on a computer browser, and export the cookies as a `cookies.txt` file (a "cookies.txt" browser extension does this).
+3. Upload `cookies.txt` to your server. **Never upload it to GitHub.**
+4. Add this line to `.env`, then restart: `YTDLP_COOKIES_FILE=/full/path/to/cookies.txt`
+
 ## Still stuck?
 
 1. Run `pm2 logs darkzone` and read the last error lines.

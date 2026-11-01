@@ -203,6 +203,8 @@ Copy these names from `.env.example` and fill in your own values.
 | `AI_INTEGRATIONS_OPENROUTER_API_KEY` | Optional | Turns on OpenRouter models |
 | `AI_INTEGRATIONS_OPENROUTER_BASE_URL` | Optional | OpenRouter API link |
 | `LOG_LEVEL` | Optional | `info`, `debug`, and so on |
+| `YTDLP_COOKIES_FILE` | Optional | Path to a `cookies.txt` so Instagram and some YouTube videos work |
+| `YTDLP_PROXY` | Optional | Proxy link, for hosts that YouTube, TikTok or Instagram block |
 
 ---
 

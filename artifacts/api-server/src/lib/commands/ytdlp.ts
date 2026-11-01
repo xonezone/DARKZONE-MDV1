@@ -54,6 +54,69 @@ const NET_ARGS = [
 ];
 
 /**
+ * Extra yt-dlp flags the bot owner can switch on with environment variables:
+ *  - YTDLP_COOKIES_FILE  path to a Netscape-format cookies.txt. Instagram (and
+ *    some YouTube videos) only work when yt-dlp is logged in. Use a throwaway
+ *    account and NEVER commit this file.
+ *  - YTDLP_PROXY         a proxy URL (http://, https://, socks5://...) for hosts
+ *    whose IP is blocked by YouTube / TikTok / Instagram.
+ */
+function userArgs(): string[] {
+  const out: string[] = [];
+  const cookies = process.env.YTDLP_COOKIES_FILE?.trim();
+  if (cookies) {
+    if (existsSync(cookies)) out.push("--cookies", cookies);
+    else logger.warn({ cookies }, "YTDLP_COOKIES_FILE is set but the file does not exist");
+  }
+  const proxy = process.env.YTDLP_PROXY?.trim();
+  if (proxy) out.push("--proxy", proxy);
+  return out;
+}
+
+let jsRuntimeArgs: string[] | null = null;
+
+/**
+ * Since yt-dlp 2025.11.12 YouTube needs an external JavaScript runtime to solve
+ * its player challenges (Deno is picked up automatically; Node must be enabled
+ * explicitly). This bot already runs on Node, so point yt-dlp at it. Older
+ * yt-dlp builds reject the flag, so only pass it when `--help` lists it.
+ */
+async function getJsRuntimeArgs(r: YtRunner): Promise<string[]> {
+  if (jsRuntimeArgs) return jsRuntimeArgs;
+  try {
+    const { stdout } = await runProcess(r.cmd, [...r.baseArgs, "--help"], { timeoutMs: 30_000 });
+    jsRuntimeArgs = /--js-runtimes/.test(stdout) ? ["--js-runtimes", `node:${process.execPath}`] : [];
+    return jsRuntimeArgs;
+  } catch {
+    return []; // don't cache a failed probe
+  }
+}
+
+function isYoutubeTarget(target: string): boolean {
+  return /^ytsearch\d*:|(^|\/\/|\.)(youtube\.com|youtu\.be|youtube-nocookie\.com)(\/|$)/i.test(target);
+}
+
+/**
+ * Argument sets to try, in order. YouTube: first the proven `android_vr` client,
+ * then YouTube's default clients with the JS runtime (android_vr gets blocked
+ * from time to time). Other sites: the same plain set twice for a transient retry.
+ */
+async function attemptSets(r: YtRunner, target: string, retryOtherSites: boolean): Promise<string[][]> {
+  const common = [...NET_ARGS, ...(await getJsRuntimeArgs(r)), ...userArgs()];
+  if (isYoutubeTarget(target)) {
+    return [[...common, ...YT_EXTRACTOR_ARGS], [...common]];
+  }
+  return retryOtherSites ? [[...common], [...common]] : [[...common]];
+}
+
+class SizeLimitError extends Error {
+  constructor() {
+    super("file exceeds size limit");
+    this.name = "SizeLimitError";
+  }
+}
+
+/**
  * Resolve which yt-dlp to run. We vendor the official **self-contained**
  * PyInstaller build (`yt-dlp_linux`) at `artifacts/api-server/bin/yt-dlp` and
  * run it DIRECTLY (not through `python3`). Two reasons:
@@ -108,23 +171,71 @@ function getRunner(): YtRunner {
  */
 export async function fetchMeta(target: string): Promise<YtMeta> {
   const r = getRunner();
-  const { code, stdout, stderr } = await runProcess(
-    r.cmd,
-    [...r.baseArgs, "-j", "--no-warnings", "--no-playlist", ...NET_ARGS, ...YT_EXTRACTOR_ARGS, "--", target],
-    { timeoutMs: 90_000 },
-  );
-  if (code !== 0 || !stdout.trim()) {
-    throw new Error(`yt-dlp metadata failed (${code}): ${stderr.slice(-200)}`);
+  let lastErr: unknown = null;
+  for (const extra of await attemptSets(r, target, false)) {
+    try {
+      const { code, stdout, stderr } = await runProcess(
+        r.cmd,
+        [...r.baseArgs, "-j", "--no-warnings", "--no-playlist", ...extra, "--", target],
+        { timeoutMs: 90_000 },
+      );
+      if (code !== 0 || !stdout.trim()) {
+        throw new Error(`yt-dlp metadata failed (${code}): ${stderr.slice(-200)}`);
+      }
+      const firstLine = stdout.trim().split("\n")[0] ?? "{}";
+      const j = JSON.parse(firstLine) as Record<string, unknown>;
+      return {
+        title: typeof j.title === "string" ? j.title : "media",
+        duration: typeof j.duration === "number" ? j.duration : null,
+        uploader: typeof j.uploader === "string" ? j.uploader : null,
+        ext: typeof j.ext === "string" ? j.ext : null,
+        webpageUrl: typeof j.webpage_url === "string" ? j.webpage_url : null,
+      };
+    } catch (err) {
+      lastErr = err;
+      logger.warn({ err, target }, "yt-dlp metadata attempt failed");
+      // A timeout means the network is the problem; a second client won't help.
+      if (err instanceof Error && /timed out/i.test(err.message)) break;
+    }
   }
-  const firstLine = stdout.trim().split("\n")[0] ?? "{}";
-  const j = JSON.parse(firstLine) as Record<string, unknown>;
-  return {
-    title: typeof j.title === "string" ? j.title : "media",
-    duration: typeof j.duration === "number" ? j.duration : null,
-    uploader: typeof j.uploader === "string" ? j.uploader : null,
-    ext: typeof j.ext === "string" ? j.ext : null,
-    webpageUrl: typeof j.webpage_url === "string" ? j.webpage_url : null,
-  };
+  throw lastErr;
+}
+
+/**
+ * List the entries of a playlist / channel / search WITHOUT downloading
+ * (`--flat-playlist`). Pass `ytsearchN:query` to get N search results.
+ * Never throws: returns [] when nothing could be read.
+ */
+export async function listFlat(
+  target: string,
+  limit: number,
+): Promise<{ title: string; url: string }[]> {
+  const r = getRunner();
+  try {
+    const extra = [...NET_ARGS, ...(await getJsRuntimeArgs(r)), ...userArgs()];
+    const { code, stdout } = await runProcess(
+      r.cmd,
+      [...r.baseArgs, "--flat-playlist", "-J", "--no-warnings", ...extra, "--", target],
+      { timeoutMs: 60_000 },
+    );
+    if (code !== 0 || !stdout.trim()) return [];
+    const doc = JSON.parse(stdout.trim()) as {
+      entries?: { title?: string; url?: string }[];
+    };
+    return (doc.entries ?? [])
+      .slice(0, limit)
+      .map((e) => ({ title: e.title ?? "unknown", url: e.url ?? "" }));
+  } catch (err) {
+    logger.warn({ err, target }, "yt-dlp list failed");
+    return [];
+  }
+}
+
+/** Remove anything a previous (failed) attempt left behind in the temp dir. */
+async function clearMedia(dir: string): Promise<void> {
+  for (const f of await readdir(dir)) {
+    await rm(join(dir, f), { recursive: true, force: true }).catch(() => {});
+  }
 }
 
 /**
@@ -146,8 +257,6 @@ export async function download(
       "--no-warnings",
       "--no-playlist",
       "--no-part",
-      ...NET_ARGS,
-      ...YT_EXTRACTOR_ARGS,
       "--max-filesize",
       `${opts.maxSizeMb}M`,
       "-f",
@@ -163,38 +272,52 @@ export async function download(
       args.push("--ffmpeg-location", getFfmpegPath());
       args.push("-x", "--audio-format", "mp3", "--audio-quality", "5");
     }
-    args.push("--", target);
 
-    // YouTube intermittently 403s datacenter IPs; one retry absorbs transient
-    // blocks (most resolve on the second attempt).
+    // YouTube intermittently blocks datacenter IPs / clients. Try each argument
+    // set in turn (see attemptSets) and keep the last error.
     let lastErr: unknown = null;
-    for (let attempt = 0; attempt < 2; attempt++) {
+    const sets = await attemptSets(r, target, true);
+    for (let attempt = 0; attempt < sets.length; attempt++) {
       try {
-        const { code, stderr } = await runProcess(r.cmd, args, { timeoutMs: 180_000 });
+        await clearMedia(dir); // never reuse a half-written file from a failed try
+        const { code, stderr } = await runProcess(
+          r.cmd,
+          [...args, ...sets[attempt], "--", target],
+          { timeoutMs: 180_000 },
+        );
         const files = await readdir(dir);
-        const file = files.find((f) => f.startsWith("media."));
+        const file = files.find((f) => f.startsWith("media.") && !/\.(part|ytdl|temp)$/i.test(f));
         if (!file) {
-          if (/max-filesize|larger than/i.test(stderr)) {
-            throw new Error("file exceeds size limit");
-          }
+          if (/max-filesize|larger than/i.test(stderr)) throw new SizeLimitError();
           throw new Error(`yt-dlp produced no file (${code}): ${stderr.slice(-200)}`);
+        }
+        // With --no-part a download that dies halfway leaves a truncated file at
+        // its final name. For plain video downloads (no post-processing) a
+        // non-zero exit therefore means the file is incomplete: reject it
+        // instead of sending a broken video. Audio keeps the old behaviour: when
+        // the mp3 conversion fails yt-dlp exits non-zero but the original
+        // container is intact and is sent with the right mimetype.
+        if (code !== 0 && !opts.audio) {
+          throw new Error(`yt-dlp exited ${code} with a partial file: ${stderr.slice(-200)}`);
         }
         const fullPath = join(dir, file);
         // Post-processing (e.g. audio extraction) can produce a file even when
         // --max-filesize couldn't pre-check an unknown remote size; enforce a hard
         // cap before buffering the whole thing into memory.
         const { size } = await stat(fullPath);
-        if (size > opts.maxSizeMb * 1024 * 1024 * 1.2) {
-          throw new Error("file exceeds size limit");
-        }
+        if (size === 0) throw new Error("yt-dlp produced an empty file");
+        if (size > opts.maxSizeMb * 1024 * 1024 * 1.2) throw new SizeLimitError();
         const buffer = await readFile(fullPath);
         const ext = file.split(".").pop() ?? "bin";
         return { buffer, ext };
       } catch (err) {
         lastErr = err;
-        if (attempt === 0) {
-          logger.warn({ err, target, attempt: 0 }, "yt-dlp download failed, retrying");
-          await new Promise((r) => setTimeout(r, 1200));
+        // Too big stays too big, and a timeout means the network is the problem.
+        if (err instanceof SizeLimitError) break;
+        if (err instanceof Error && /timed out/i.test(err.message)) break;
+        if (attempt < sets.length - 1) {
+          logger.warn({ err, target, attempt }, "yt-dlp download failed, retrying");
+          await new Promise((res) => setTimeout(res, 1200));
         }
       }
     }

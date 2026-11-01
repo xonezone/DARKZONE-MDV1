@@ -2,9 +2,9 @@ import { mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import type { Command, CommandContext } from "../types";
-import { fetchMeta, download } from "../ytdlp";
+import { fetchMeta, download, listFlat } from "../ytdlp";
 import { fetchBuffer } from "../http-utils";
-import { hostMatches } from "../url-utils";
+import { hostMatches, isPublicHttpUrl } from "../url-utils";
 import { tryAcquire } from "../limiter";
 import { runProcess } from "../proc";
 import { getFfmpegPath } from "../ffmpeg";
@@ -32,6 +32,12 @@ const ALLOWED = [
 ];
 
 const SOUNDCLOUD_SEARCH = "ytsearch1";
+
+/** Format seconds as m:ss (yt-dlp can return fractional seconds). */
+function fmtDur(sec: number): string {
+  const total = Math.floor(sec);
+  return `${Math.floor(total / 60)}:${String(total % 60).padStart(2, "0")}`;
+}
 
 function isUrl(s: string): boolean {
   return /^https?:\/\//i.test(s.trim());
@@ -64,7 +70,7 @@ async function sendAudio(ctx: CommandContext, target: string): Promise<void> {
   await ctx.react("⏳");
   const meta = await fetchMeta(target);
   if (meta.duration && meta.duration > MAX_DURATION_S) {
-    await ctx.reply(`❌ That's too long (${Math.floor(meta.duration / 60)}:${String(meta.duration % 60).padStart(2, "0")}). Limit is 30 minutes.`);
+    await ctx.reply(`❌ That's too long (${fmtDur(meta.duration)}). Limit is 30 minutes.`);
     return;
   }
   const { buffer, ext } = await download(target, { format: AUDIO_FORMAT, audio: true, maxSizeMb: MAX_AUDIO_MB });
@@ -80,46 +86,140 @@ async function sendVideo(ctx: CommandContext, target: string): Promise<void> {
   await ctx.react("✅");
 }
 
+const TIKTOK_UA = "Mozilla/5.0 (Windows NT 10.0; Win64; x64)";
+const MAX_TIKTOK_BYTES = MAX_VIDEO_MB * 1024 * 1024;
+
+interface TikwmData {
+  title?: string;
+  play?: string;
+  music?: string;
+  nickname?: string;
+  images?: string[];
+}
+
+/** tikwm sometimes returns relative or protocol-less media links. */
+function absTikwmUrl(u: string): string {
+  if (u.startsWith("//")) return `https:${u}`;
+  if (u.startsWith("/")) return `https://www.tikwm.com${u}`;
+  return u;
+}
+
+async function tikwmLookup(input: string): Promise<TikwmData> {
+  const res = await fetch(`https://www.tikwm.com/api/?url=${encodeURIComponent(input)}`, {
+    headers: { "User-Agent": TIKTOK_UA },
+    signal: AbortSignal.timeout(30_000),
+  });
+  if (!res.ok) throw new Error(`tikwm HTTP ${res.status}`);
+  const j = (await res.json()) as { code?: number; data?: TikwmData };
+  if (j.code !== 0 || !j.data) throw new Error("tikwm returned no media");
+  return j.data;
+}
+
+/** Fetch a media file from tikwm's CDN with a size cap. */
+async function tikwmFetch(raw: string): Promise<{ buffer: Buffer; contentType: string; url: string }> {
+  const url = absTikwmUrl(raw);
+  if (!isPublicHttpUrl(url)) throw new Error("unsafe media url");
+  const media = await fetch(url, {
+    headers: { "User-Agent": TIKTOK_UA },
+    signal: AbortSignal.timeout(60_000),
+  });
+  if (!media.ok) throw new Error(`tiktok CDN HTTP ${media.status}`);
+  const declared = Number(media.headers.get("content-length") ?? 0);
+  if (declared > MAX_TIKTOK_BYTES) throw new Error("tiktok file too large");
+  const buffer = Buffer.from(await media.arrayBuffer());
+  if (buffer.length === 0) throw new Error("tiktok file empty");
+  if (buffer.length > MAX_TIKTOK_BYTES) throw new Error("tiktok file too large");
+  return { buffer, contentType: (media.headers.get("content-type") ?? "").toLowerCase(), url };
+}
+
 /** Download a TikTok video via the public tikwm API (yt-dlp is IP-blocked). */
 async function tiktokApiDownload(ctx: CommandContext, wantAudio = false): Promise<void> {
   const input = arg(ctx);
-  if (!input || !/^https?:\/\/(www\.)?(tiktok\.com|vm\.tiktok\.com|vt\.tiktok\.com)\//i.test(input)) {
+  if (!input || !hostMatches(input, ["tiktok.com"])) {
     await ctx.reply(`Send a TikTok link.\nExample: *${ctx.prefix}${ctx.command} https://vt.tiktok.com/...*`);
     return;
   }
   await ctx.react("⏳");
   try {
-    const res = await fetch(`https://www.tikwm.com/api/?url=${encodeURIComponent(input)}`, {
-      headers: { "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)" },
-      signal: AbortSignal.timeout(30_000),
-    });
-    const j = (await res.json()) as { code?: number; data?: { title?: string; play?: string; music?: string; nickname?: string } };
-    const src = wantAudio ? j.data?.music : j.data?.play;
-    if (j.code !== 0 || !src) {
+    const data = await tikwmLookup(input);
+    const src = wantAudio ? data.music : data.play;
+    if (!src) {
+      if (!wantAudio && data.images?.length) {
+        await ctx.reply(`📸 That's a photo slideshow. Use *${ctx.prefix}ttslide <link>* for the pictures.`);
+        return;
+      }
       throw new Error("tikwm returned no media");
     }
-    const media = await fetch(src, {
-      headers: { "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)" },
-      signal: AbortSignal.timeout(60_000),
-    });
-    if (!media.ok) throw new Error(`tiktok CDN HTTP ${media.status}`);
-    const buffer = Buffer.from(await media.arrayBuffer());
-    const title = j.data?.title?.slice(0, 90) || "TikTok";
+    const { buffer, contentType, url } = await tikwmFetch(src);
+    const title = data.title?.slice(0, 90) || "TikTok";
     if (wantAudio) {
-      await ctx.sock.sendMessage(ctx.from, { audio: buffer, mimetype: "audio/mp4", fileName: `${title.replace(/[^\w-]+/g, "_").slice(0, 40)}.mp4` }, { quoted: ctx.msg });
+      // tikwm's `music` file is normally an mp3. The mimetype MUST match the
+      // real bytes, otherwise WhatsApp says "something is wrong with the audio file".
+      const isMp3 = contentType.includes("mpeg") || /\.mp3(\?|$)/i.test(url);
+      const ext = isMp3 ? "mp3" : "m4a";
+      await ctx.sock.sendMessage(
+        ctx.from,
+        {
+          audio: buffer,
+          mimetype: isMp3 ? "audio/mpeg" : "audio/mp4",
+          fileName: `${title.replace(/[^\w-]+/g, "_").slice(0, 40)}.${ext}`,
+        },
+        { quoted: ctx.msg },
+      );
     } else {
-      const caption = `🎬 *${title}*\nBy ${j.data?.nickname ?? "unknown"}`.slice(0, 250);
+      const caption = `🎬 *${title}*\nBy ${data.nickname ?? "unknown"}`.slice(0, 250);
       await ctx.sock.sendMessage(ctx.from, { video: buffer, mimetype: "video/mp4", caption }, { quoted: ctx.msg });
     }
     await ctx.react("✅");
   } catch (err) {
     logger.warn({ err, cmd: ctx.command }, "tiktok api download failed");
     try {
-      await sendVideo(ctx, input);
+      // Fall back to yt-dlp, and keep the kind of media the user asked for.
+      if (wantAudio) await sendAudio(ctx, input);
+      else await sendVideo(ctx, input);
     } catch {
       await ctx.react("❌");
-      await ctx.reply("❌ Couldn't download that TikTok video (TikTok may be blocking this server right now). Try again later.");
+      await ctx.reply("❌ Couldn't download that TikTok (TikTok may be blocking this server right now). Try again later.");
     }
+  }
+}
+
+/** TikTok photo slideshow: send the pictures (up to 10). */
+async function tiktokSlideDownload(ctx: CommandContext): Promise<void> {
+  const input = arg(ctx);
+  if (!input || !hostMatches(input, ["tiktok.com"])) {
+    await ctx.reply(`Send a TikTok *photo slideshow* link.\nExample: *${ctx.prefix}${ctx.command} https://vt.tiktok.com/...*`);
+    return;
+  }
+  await ctx.react("⏳");
+  try {
+    const data = await tikwmLookup(input);
+    const images = (data.images ?? []).slice(0, 10);
+    if (images.length === 0) {
+      await ctx.reply(`❌ That isn't a photo slideshow. Use *${ctx.prefix}tiktok <link>* for videos.`);
+      return;
+    }
+    const caption = `📸 *${data.title?.slice(0, 90) || "TikTok slideshow"}*\nBy ${data.nickname ?? "unknown"}`.slice(0, 250);
+    let sent = 0;
+    for (const img of images) {
+      try {
+        const { buffer } = await tikwmFetch(img);
+        await ctx.sock.sendMessage(
+          ctx.from,
+          { image: buffer, ...(sent === 0 ? { caption } : {}) },
+          { quoted: ctx.msg },
+        );
+        sent++;
+      } catch (err) {
+        logger.warn({ err, cmd: ctx.command }, "tiktok slide image failed");
+      }
+    }
+    if (sent === 0) throw new Error("no slideshow image could be sent");
+    await ctx.react("✅");
+  } catch (err) {
+    logger.warn({ err, cmd: ctx.command }, "tiktok slideshow failed");
+    await ctx.react("❌");
+    await ctx.reply("❌ Couldn't download that slideshow. Try again later.");
   }
 }
 
@@ -206,30 +306,13 @@ async function ytAudio(ctx: CommandContext): Promise<void> {
   }
 }
 
-/** yt-dlp flat-playlist JSON for a playlist/channel → list of titles. */
+/** Playlist / channel / search entries via yt-dlp --flat-playlist (never throws). */
 async function listItems(target: string, limit: number): Promise<{ title: string; url: string }[]> {
-  const { runProcess } = await import("../proc");
-  const { existsSync } = await import("node:fs");
-  const { dirname, join: j } = await import("node:path");
-  const { fileURLToPath } = await import("node:url");
-  const moduleDir = dirname(fileURLToPath(import.meta.url));
-  const ytdlp = join(moduleDir, "..", "bin", "yt-dlp");
-  const cmd = existsSync(ytdlp) ? ytdlp : "yt-dlp";
-  const { code, stdout } = await runProcess(
-    cmd,
-    ["--flat-playlist", "-J", "--no-warnings", "--socket-timeout", "30", "--retries", "3", "--", target],
-    { timeoutMs: 60_000 },
-  );
-  if (code !== 0 || !stdout.trim()) return [];
-  const j0 = JSON.parse(stdout.trim().split("\n")[0] ?? "{}") as {
-    title?: string;
-    entries?: { title?: string; url?: string }[];
-  };
-  return (j0.entries ?? []).slice(0, limit).map((e) => ({ title: e.title ?? "unknown", url: e.url ?? "" }));
+  return listFlat(target, limit);
 }
 
 function ytId(url: string): string | null {
-  const m = /(?:v=|youtu\.be\/|shorts\/|embed\/)([a-zA-Z0-9_-]{6,})/.exec(url);
+  const m = /(?:v=|youtu\.be\/|shorts\/|embed\/|live\/)([a-zA-Z0-9_-]{11})/.exec(url);
   return m ? m[1] : null;
 }
 
@@ -260,7 +343,7 @@ async function infoHandler(ctx: CommandContext): Promise<void> {
   }
   try {
     const meta = await fetchMeta(input);
-    const dur = meta.duration ? `${Math.floor(meta.duration / 60)}:${String(meta.duration % 60).padStart(2, "0")}` : "unknown";
+    const dur = meta.duration ? fmtDur(meta.duration) : "unknown";
     await ctx.reply(`📽️ *${meta.title}*\n\n⏱️ Duration: ${dur}\n👤 Uploader: ${meta.uploader ?? "unknown"}\n🔗 ${meta.webpageUrl ?? input}`);
   } catch {
     await ctx.reply("❌ Couldn't read that link.");
@@ -276,14 +359,16 @@ async function searchHandler(ctx: CommandContext): Promise<void> {
   }
   await ctx.react("🔍");
   try {
-    const items = await listItems(`${SOUNDCLOUD_SEARCH}:${q}`, 5);
+    const items = await listItems(`ytsearch5:${q}`, 5);
     if (items.length === 0) {
       await ctx.reply("❌ No results found.");
       return;
     }
     const lines = items.map((e, i) => `${i + 1}. ${e.title}`).join("\n");
     await ctx.reply(`🔍 *Top results for "${q}":*\n${lines}\n\n▶️ Playing the top result…`);
-    await sendAudio(ctx, `${SOUNDCLOUD_SEARCH}:${q}`);
+    // Play exactly the track that was listed first (a second search can differ).
+    const top = items[0].url;
+    await sendAudio(ctx, top && hostMatches(top, ALLOWED) ? top : `${SOUNDCLOUD_SEARCH}:${q}`);
   } catch {
     await ctx.reply("❌ Search failed right now. Try again later.");
   }
@@ -370,11 +455,11 @@ export const downloads2Commands: Command[] = [
         await ctx.reply("Usage: *" + ctx.prefix + "charts <genre/vibe>* — e.g. .charts pop");
         return;
       }
-      const items = await listItems(`${SOUNDCLOUD_SEARCH}:${input}`, 8);
+      const items = await listItems(`ytsearch8:${input}`, 8);
       await ctx.reply(items.length ? `📈 *Results:*\n${items.map((e, i) => `${i + 1}. ${e.title}`).join("\n")}` : "❌ No results.");
     } },
   { name: "trendingmusic", category: "DOWNLOAD", desc: "Trending music search", handler: async (ctx) => {
-      const items = await listItems(`${SOUNDCLOUD_SEARCH}:trending`, 8);
+      const items = await listItems(`ytsearch8:trending music`, 8);
       await ctx.reply(items.length ? `🔥 *Trending now:*\n${items.map((e, i) => `${i + 1}. ${e.title}`).join("\n")}` : "❌ No results.");
     } },
 
@@ -425,7 +510,7 @@ export const downloads2Commands: Command[] = [
   // TikTok
   { name: "tiktokhd", category: "DOWNLOAD", desc: "TikTok HD video", aliases: ["tt", "tiktok", "tik"], handler: tiktokApiDownload },
   { name: "ttmp3", category: "DOWNLOAD", desc: "TikTok audio", handler: async (ctx) => tiktokApiDownload(ctx, true) },
-  { name: "ttslide", category: "DOWNLOAD", desc: "TikTok slideshow", handler: videoCmd },
+  { name: "ttslide", category: "DOWNLOAD", desc: "TikTok photo slideshow", handler: tiktokSlideDownload },
   { name: "xdl", category: "DOWNLOAD", desc: "X (Twitter) video", handler: videoCmd },
   { name: "threads", category: "DOWNLOAD", desc: "Threads video", handler: videoCmd },
   { name: "reddit", category: "DOWNLOAD", desc: "Reddit video", handler: videoCmd },

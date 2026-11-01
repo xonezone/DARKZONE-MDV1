@@ -66,3 +66,6 @@ artifacts/api-server/data/captures/
 artifacts/api-server/data/wa-auth/
 # Downloaded tools (ffmpeg, yt-dlp)
 artifacts/api-server/bin/
+
+# yt-dlp login cookies - NEVER upload these
+cookies*.txt
