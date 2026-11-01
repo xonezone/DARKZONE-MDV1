@@ -12,8 +12,8 @@
 ![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=typescript&logoColor=white)
 ![License](https://img.shields.io/badge/license-MIT-22c55e?style=for-the-badge)
 
-[![Stars](https://img.shields.io/github/stars/xonezone/DarkZone-MD?style=social)](https://github.com/xonezone/DarkZone-MD/stargazers)
-[![Forks](https://img.shields.io/github/forks/xonezone/DarkZone-MD?style=social)](https://github.com/xonezone/DarkZone-MD/network/members)
+[![Stars](https://img.shields.io/github/stars/xonezone/DARKZONE-MDV1?style=social)](https://github.com/xonezone/DARKZONE-MDV1/stargazers)
+[![Forks](https://img.shields.io/github/forks/xonezone/DARKZONE-MDV1?style=social)](https://github.com/xonezone/DARKZONE-MDV1/network/members)
 
 **[✨ Features](#-features) · [📚 Commands](#-command-categories) · [🚀 Quick Start](#-quick-start) · [⚙️ Settings](#%EF%B8%8F-environment-variables) · [❓ FAQ](#-faq) · [🤝 Support](#-support)**
 
@@ -101,8 +101,8 @@ Type **`.menu`** in WhatsApp to see the full, live list.
 ### 1. Download the project
 
 ```bash
-git clone https://github.com/xonezone/DarkZone-MD.git
-cd DarkZone-MD
+git clone https://github.com/xonezone/DARKZONE-MDV1.git
+cd DARKZONE-MDV1
 ```
 
 ### 2. Install
@@ -255,8 +255,8 @@ Run <code>npm install -g pnpm</code>, then close and reopen your terminal.
 
 - 👑 **Owner:** RAJA MOIZ · [💬 Chat on WhatsApp](https://wa.me/923309333332)
 - 📢 **Updates:** [Join the WhatsApp Channel](https://whatsapp.com/channel/0029Vb97n1F6RGJCpAD8Jt0D)
-- 🐛 Found a bug? [Open an issue](https://github.com/xonezone/DarkZone-MD/issues)
-- 💡 Have an idea? [Start a discussion](https://github.com/xonezone/DarkZone-MD/discussions)
+- 🐛 Found a bug? [Open an issue](https://github.com/xonezone/DARKZONE-MDV1/issues)
+- 💡 Have an idea? [Start a discussion](https://github.com/xonezone/DARKZONE-MDV1/discussions)
 - ⭐ Like the project? Give it a **star**. It really helps!
 
 ---
