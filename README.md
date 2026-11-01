@@ -15,7 +15,7 @@
 [![Stars](https://img.shields.io/github/stars/xonezone/DARKZONE-MDV1?style=social)](https://github.com/xonezone/DARKZONE-MDV1/stargazers)
 [![Forks](https://img.shields.io/github/forks/xonezone/DARKZONE-MDV1?style=social)](https://github.com/xonezone/DARKZONE-MDV1/network/members)
 
-**[✨ Features](#-features) · [📚 Commands](#-command-categories) · [🚀 Quick Start](#-quick-start) · [⚙️ Settings](#%EF%B8%8F-environment-variables) · [❓ FAQ](#-faq) · [🤝 Support](#-support)**
+**[✨ Features](#-features) · [📚 Commands](#-command-categories) · [🚀 Quick Start](#-quick-start) · [⚙️ Settings](#%EF%B8%8F-environment-variables) · [📖 Docs](#-documentation) · [❓ FAQ](#-faq) · [🤝 Support](#-support)**
 
 <br/>
 
@@ -95,6 +95,7 @@ Type **`.menu`** in WhatsApp to see the full, live list.
 - **pnpm** (install it with `npm install -g pnpm`)
 - **Git**
 - A **PostgreSQL** database (free ones work, for example Neon or Supabase)
+- **ffmpeg** and **yt-dlp** for audio, video and sticker commands
 - A **Telegram bot token** from [@BotFather](https://t.me/BotFather)
 - A free [Clerk](https://clerk.com) account for dashboard login
 
@@ -130,8 +131,13 @@ pnpm --filter @workspace/db run push
 ### 5. Start the bot
 
 ```bash
-pnpm --filter @workspace/api-server run dev
+pnpm --filter @workspace/api-server run build
+./start.sh
 ```
+
+`start.sh` loads your `.env` file for you, then starts the bot.
+
+> 🖥️ Running on a server? Follow the full **[Setup & Deploy Guide](docs/DEPLOY.md)**. It covers ffmpeg, yt-dlp and keeping the bot online 24/7 with PM2.
 
 ### 6. Start the dashboard (optional)
 
@@ -174,7 +180,7 @@ Copy these names from `.env.example` and fill in your own values.
 ## 🗂️ Project Structure
 
 ```text
-DarkZone-MD/
+DARKZONE-MDV1/
 ├── artifacts/
 │   ├── api-server/              # 🤖 The bot
 │   │   └── src/
@@ -214,6 +220,33 @@ Commands are small and easy to write. Open a file in `artifacts/api-server/src/l
 ```
 
 Then add `"hello"` to the matching list in `menu-data.ts` so it shows in the menu.
+
+---
+
+## 📖 Documentation
+
+| Guide | What is inside |
+|---|---|
+| 🚀 [Setup & Deploy Guide](docs/DEPLOY.md) | Full server setup, ffmpeg, yt-dlp, PM2, updating |
+| 📚 [Command List](docs/COMMANDS.md) | Every command with a short description |
+| 🛠️ [Troubleshooting](docs/TROUBLESHOOTING.md) | Common problems and fixes |
+| 🤝 [Contributing](CONTRIBUTING.md) | How to help and add commands |
+| 🔒 [Security](SECURITY.md) | How to report problems and stay safe |
+| 📝 [Changelog](CHANGELOG.md) | What changed in each version |
+
+---
+
+## 🧰 Built With
+
+| Part | Tools |
+|---|---|
+| 🤖 Bot | TypeScript, Node.js, Express, [Baileys](https://github.com/WhiskeySockets/Baileys) |
+| 🖥️ Dashboard | React, Vite, Tailwind CSS |
+| 🗄️ Database | PostgreSQL with Drizzle ORM |
+| 🔐 Login | Clerk |
+| ✈️ Pairing | Telegram bot |
+| 🧠 AI | OpenAI, Gemini and OpenRouter connections |
+| 📦 Packages | pnpm workspaces |
 
 ---
 
@@ -261,6 +294,14 @@ Run <code>npm install -g pnpm</code>, then close and reopen your terminal.
 
 ---
 
+## ⭐ Star History
+
+<a href="https://star-history.com/#xonezone/DARKZONE-MDV1&Date">
+  <img src="https://api.star-history.com/svg?repos=xonezone/DARKZONE-MDV1&type=Date" alt="Star history chart" width="600" />
+</a>
+
+---
+
 ## ⚠️ Disclaimer
 
 Dark Zone MD is not made by, connected to, or approved by WhatsApp or Meta. Use it at your own risk and follow WhatsApp's rules and your local laws. The creator is not responsible for bans or misuse.
@@ -276,7 +317,7 @@ Dark Zone MD is not made by, connected to, or approved by WhatsApp or Meta. Use 
 
 ## 📜 License
 
-Released under the **MIT License**.
+Released under the **MIT License**. See the [LICENSE](LICENSE) file.
 
 <div align="center">
 

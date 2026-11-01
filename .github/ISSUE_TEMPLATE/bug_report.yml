@@ -1,0 +1,39 @@
+name: 🐛 Bug report
+description: Something is not working
+title: "[Bug]: "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for helping! 🙏 **Never paste tokens, keys, your .env file or session files here.**
+  - type: textarea
+    id: what
+    attributes:
+      label: What went wrong?
+      placeholder: Tell us what happened and what you expected.
+    validations:
+      required: true
+  - type: input
+    id: command
+    attributes:
+      label: Command used
+      placeholder: ".play despacito"
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to repeat it
+      placeholder: |
+        1. ...
+        2. ...
+  - type: textarea
+    id: logs
+    attributes:
+      label: Error message or logs
+      description: Remove any private info first.
+      render: shell
+  - type: input
+    id: env
+    attributes:
+      label: Where do you run the bot?
+      placeholder: "Ubuntu VPS, Termux, Replit, Windows..."
