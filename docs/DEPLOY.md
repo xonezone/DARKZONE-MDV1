@@ -108,10 +108,13 @@ Useful PM2 commands:
 
 ## 8️⃣ Link your WhatsApp
 
-Open the dashboard, log in, go to **Link WhatsApp**, and follow the steps.
+Open your bot in Telegram and send `/pair 923001234567` (your own number, with country code, no `+`).
+Type the code it gives you in WhatsApp under **Linked devices → Link a device → Link with phone number instead**.
 When it connects, send **`.menu`** to your bot. 🎉
 
-## 🖥️ About the dashboard
+> Prefer another host? See [Hosting Options](HOSTING.md) for Replit, Render and bot panels.
+
+## 🖥️ About the dashboard (optional)
 
 The dashboard is a separate React app in `artifacts/whatsapp-dashboard`. It needs two values when it starts:
 

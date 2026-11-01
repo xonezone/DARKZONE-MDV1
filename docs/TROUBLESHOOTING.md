@@ -14,6 +14,10 @@ Find your problem, then try the fix.
 | Dashboard login does not work | Wrong Clerk keys | Check `CLERK_SECRET_KEY` and `CLERK_PUBLISHABLE_KEY` |
 | Telegram pairing does nothing | Wrong bot token | Make a new token in @BotFather and update `.env` |
 | Bot logged out of WhatsApp | Session ended or WhatsApp unlinked it | Open the dashboard and link again |
+| Bot logs out after every restart | The host wipes the `wa-auth` folder | Use a host with a persistent disk, a panel, or a VPS. See [Hosting Options](HOSTING.md) |
+| Bot stops answering after a while | A free host put it to sleep | Use a paid plan, a panel, or a VPS |
+| Render build fails | Blueprint is in beta | Open an issue with the build log |
+| Panel start takes very long | First start installs and builds | Wait a few minutes and watch the console |
 | `403` when pushing to GitHub | Wrong password | Use a **token** as the password, with the `repo` box ticked |
 | Push says `fetch first` | The GitHub repo already has files | Pull first, or use a new empty repo |
 

@@ -1,0 +1,37 @@
+# Dark Zone MD - Render Blueprint (BETA)
+# Click "Deploy to Render" in the README, or in Render choose New > Blueprint.
+services:
+  - type: web
+    name: dark-zone-md
+    runtime: docker
+    plan: starter            # a paid plan: needed for a disk and to stay awake 24/7
+    healthCheckPath: /api/healthz
+    disk:
+      name: darkzone-data
+      mountPath: /app/artifacts/api-server/data   # keeps your WhatsApp login safe
+      sizeGB: 1
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: DATABASE_URL          # a PostgreSQL link (Neon, Supabase, Render Postgres)
+        sync: false
+      - key: TELEGRAM_BOT_TOKEN
+        sync: false
+      - key: TELEGRAM_POLLING
+        value: "true"
+      - key: CLERK_SECRET_KEY
+        sync: false
+      - key: CLERK_PUBLISHABLE_KEY
+        sync: false
+      - key: AI_INTEGRATIONS_OPENAI_API_KEY
+        sync: false
+      - key: AI_INTEGRATIONS_OPENAI_BASE_URL
+        sync: false
+      - key: AI_INTEGRATIONS_GEMINI_API_KEY
+        sync: false
+      - key: AI_INTEGRATIONS_GEMINI_BASE_URL
+        sync: false
+      - key: AI_INTEGRATIONS_OPENROUTER_API_KEY
+        sync: false
+      - key: AI_INTEGRATIONS_OPENROUTER_BASE_URL
+        sync: false

@@ -61,3 +61,8 @@ artifacts/api-server/data/captures/
 .env
 .env.*
 !.env.example
+
+# WhatsApp login (session) files - NEVER upload these
+artifacts/api-server/data/wa-auth/
+# Downloaded tools (ffmpeg, yt-dlp)
+artifacts/api-server/bin/

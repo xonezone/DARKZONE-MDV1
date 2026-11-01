@@ -15,7 +15,7 @@
 [![Stars](https://img.shields.io/github/stars/xonezone/DARKZONE-MDV1?style=social)](https://github.com/xonezone/DARKZONE-MDV1/stargazers)
 [![Forks](https://img.shields.io/github/forks/xonezone/DARKZONE-MDV1?style=social)](https://github.com/xonezone/DARKZONE-MDV1/network/members)
 
-**[✨ Features](#-features) · [📚 Commands](#-command-categories) · [🚀 Quick Start](#-quick-start) · [⚙️ Settings](#%EF%B8%8F-environment-variables) · [📖 Docs](#-documentation) · [❓ FAQ](#-faq) · [🤝 Support](#-support)**
+**[✨ Features](#-features) · [📚 Commands](#-command-categories) · [🚀 Quick Start](#-quick-start) · [⚙️ Settings](#%EF%B8%8F-environment-variables) · [☁️ Hosting](#%EF%B8%8F-hosting-options) · [📖 Docs](#-documentation) · [❓ FAQ](#-faq) · [🤝 Support](#-support)**
 
 <br/>
 
@@ -149,7 +149,36 @@ PORT=5173 BASE_PATH=/ pnpm --filter @workspace/whatsapp-dashboard run dev
 
 ### 7. Link your WhatsApp
 
-Open the dashboard, log in, and go to the **Link WhatsApp** page. Follow the steps on screen. When it connects, send **`.menu`** to your bot. 🎉
+Use your Telegram bot. You do not need the dashboard for this.
+
+1. Open your bot in Telegram and send `/start`
+2. Send `/pair 923001234567` (use your own number, with country code and no `+`)
+3. In WhatsApp go to **Linked devices → Link a device → Link with phone number instead**, then type the code
+4. Send **`.menu`** to your bot. 🎉
+
+---
+
+## ☁️ Hosting Options
+
+Run Dark Zone MD on the host you like.
+
+<div align="center">
+
+<a href="https://replit.com/github/xonezone/DARKZONE-MDV1"><img src="https://img.shields.io/badge/Run%20on-Replit-F26207?style=for-the-badge&logo=replit&logoColor=white" alt="Run on Replit" /></a>
+&nbsp;
+<a href="https://render.com/deploy?repo=https://github.com/xonezone/DARKZONE-MDV1"><img src="https://render.com/images/deploy-to-render-button.svg" alt="Deploy to Render" height="40" /></a>
+
+</div>
+
+| Host | Best for | Guide |
+|---|---|---|
+| 🟠 **Replit** | Easiest start | [Replit steps](docs/HOSTING.md#-replit) |
+| 🟣 **Render** | One-click cloud (paid plan for 24/7) | [Render steps](docs/HOSTING.md#-render) |
+| 🟢 **Bot panel** | Cheap bot hosts (Pterodactyl style) | [Panel steps](docs/HOSTING.md#-bot-hosting-panel-pterodactyl-style) |
+| 🖥️ **VPS** | Full control | [Deploy guide](docs/DEPLOY.md) |
+| 🐳 **Docker** | Advanced | [Docker steps](docs/HOSTING.md#-docker-advanced) |
+
+> ⚠️ Your WhatsApp login is saved in a folder on the host. Pick a host that keeps its files, or you will have to link again after each restart. Read [this note](docs/HOSTING.md#%EF%B8%8F-read-this-first-whatsapp-login-must-be-saved) first.
 
 ---
 
@@ -227,6 +256,7 @@ Then add `"hello"` to the matching list in `menu-data.ts` so it shows in the men
 
 | Guide | What is inside |
 |---|---|
+| ☁️ [Hosting Options](docs/HOSTING.md) | Replit, Render, bot panels, Docker |
 | 🚀 [Setup & Deploy Guide](docs/DEPLOY.md) | Full server setup, ffmpeg, yt-dlp, PM2, updating |
 | 📚 [Command List](docs/COMMANDS.md) | Every command with a short description |
 | 🛠️ [Troubleshooting](docs/TROUBLESHOOTING.md) | Common problems and fixes |
