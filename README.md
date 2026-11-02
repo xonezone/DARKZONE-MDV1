@@ -15,13 +15,44 @@
 [![Stars](https://img.shields.io/github/stars/xonezone/DARKZONE-MDV1?style=social)](https://github.com/xonezone/DARKZONE-MDV1/stargazers)
 [![Forks](https://img.shields.io/github/forks/xonezone/DARKZONE-MDV1?style=social)](https://github.com/xonezone/DARKZONE-MDV1/network/members)
 
-**[✨ Features](#-features) · [📚 Commands](#-command-categories) · [🚀 Quick Start](#-quick-start) · [⚙️ Settings](#%EF%B8%8F-environment-variables) · [🔑 Session ID](#-get-a-session-id) · [☁️ Hosting](#%EF%B8%8F-hosting-options) · [📖 Docs](#-documentation) · [❓ FAQ](#-faq) · [🤝 Support](#-support)**
+**[✨ Features](#-features) · [📚 Commands](#-command-categories) · [⚡ Deploy](#-deploy-in-3-steps) · [🚀 Quick Start](#-quick-start) · [⚙️ Settings](#%EF%B8%8F-environment-variables) · [🔑 Session ID](#-get-a-session-id) · [☁️ Hosting](#%EF%B8%8F-hosting-options) · [📖 Docs](#-documentation) · [❓ FAQ](#-faq) · [🤝 Support](#-support)**
 
 <br/>
 
-<a href="https://wa.me/923309333332"><img src="https://img.shields.io/badge/💬%20Chat%20with%20Owner-25D366?style=for-the-badge&logo=whatsapp&logoColor=white" alt="Chat with Owner on WhatsApp" /></a>
+<img src="https://capsule-render.vercel.app/api?type=rect&color=gradient&customColorList=6,11,20&height=3&section=header" width="100%" alt="" />
+
+<br/>
+
+<a href="https://github.com/xonezone/DARKZONE-MDV1/fork"><img src="https://img.shields.io/badge/🍴%20FORK-THIS%20REPO-f59e0b?style=for-the-badge&labelColor=78350f&logo=github&logoColor=white" alt="Fork this repo" /></a>
 &nbsp;
-<a href="https://whatsapp.com/channel/0029Vb97n1F6RGJCpAD8Jt0D"><img src="https://img.shields.io/badge/📢%20Join%20WhatsApp%20Channel-128C7E?style=for-the-badge&logo=whatsapp&logoColor=white" alt="Join our WhatsApp Channel" /></a>
+<a href="https://YOUR_BOT_URL/api/session-pair"><img src="https://img.shields.io/badge/🔑%20GET-PAIR%20CODE-a855f7?style=for-the-badge&labelColor=581c87&logo=whatsapp&logoColor=white" alt="Get Pair Code" /></a>
+&nbsp;
+<a href="https://render.com/deploy?repo=https://github.com/xonezone/DARKZONE-MDV1"><img src="https://img.shields.io/badge/🚀%20DEPLOY%20ON-RENDER-46E3B7?style=for-the-badge&labelColor=0f172a&logo=render&logoColor=white" alt="Deploy on Render" /></a>
+
+<a href="https://replit.com/github/xonezone/DARKZONE-MDV1"><img src="https://img.shields.io/badge/💻%20RUN%20ON-REPLIT-F26207?style=for-the-badge&labelColor=0E1525&logo=replit&logoColor=white" alt="Run on Replit" /></a>
+&nbsp;
+<a href="docs/HOSTING.md#-bot-hosting-panel-pterodactyl-style"><img src="https://img.shields.io/badge/🖥️%20DEPLOY%20ON-PANEL-22c55e?style=for-the-badge&labelColor=14532d" alt="Deploy on a panel" /></a>
+&nbsp;
+<a href="docs/DEPLOY.md"><img src="https://img.shields.io/badge/🌐%20DEPLOY%20ON-VPS-3b82f6?style=for-the-badge&labelColor=1e3a8a&logo=ubuntu&logoColor=white" alt="Deploy on a VPS" /></a>
+&nbsp;
+<a href="docs/HOSTING.md#-docker-advanced"><img src="https://img.shields.io/badge/🐳%20RUN%20WITH-DOCKER-0db7ed?style=for-the-badge&labelColor=0c4a6e&logo=docker&logoColor=white" alt="Run with Docker" /></a>
+
+<br/>
+
+<a href="https://wa.me/923309333332"><img src="https://img.shields.io/badge/💬%20CHAT%20WITH-OWNER-ec4899?style=for-the-badge&labelColor=831843&logo=whatsapp&logoColor=white" alt="Chat with the owner" /></a>
+&nbsp;
+<a href="https://whatsapp.com/channel/0029Vb97n1F6RGJCpAD8Jt0D"><img src="https://img.shields.io/badge/📢%20JOIN-WHATSAPP%20CHANNEL-25D366?style=for-the-badge&labelColor=075e54&logo=whatsapp&logoColor=white" alt="Join the WhatsApp channel" /></a>
+&nbsp;
+<a href="https://github.com/xonezone/DARKZONE-MDV1"><img src="https://img.shields.io/badge/⭐%20STAR-THIS%20REPO-facc15?style=for-the-badge&labelColor=713f12&logo=github&logoColor=white" alt="Star this repo" /></a>
+
+<br/>
+
+<a href="https://github.com/xonezone/DARKZONE-MDV1/stargazers"><img src="https://img.shields.io/github/stars/xonezone/DARKZONE-MDV1?style=for-the-badge&color=facc15&labelColor=1f2937&logo=github&logoColor=white" alt="stars" /></a>
+<a href="https://github.com/xonezone/DARKZONE-MDV1/network/members"><img src="https://img.shields.io/github/forks/xonezone/DARKZONE-MDV1?style=for-the-badge&color=06b6d4&labelColor=1f2937&logo=github&logoColor=white" alt="forks" /></a>
+<a href="https://github.com/xonezone/DARKZONE-MDV1/issues"><img src="https://img.shields.io/github/issues/xonezone/DARKZONE-MDV1?style=for-the-badge&color=ef4444&labelColor=1f2937&logo=github&logoColor=white" alt="issues" /></a>
+<img src="https://img.shields.io/github/last-commit/xonezone/DARKZONE-MDV1?style=for-the-badge&color=a855f7&labelColor=1f2937" alt="last commit" />
+
+<img src="https://capsule-render.vercel.app/api?type=rect&color=gradient&customColorList=6,11,20&height=3&section=header" width="100%" alt="" />
 
 </div>
 
@@ -34,6 +65,45 @@
 You link your WhatsApp once, then run everything from chat or from the dashboard.
 
 > 🛡️ Built to be tidy. Commands live in small files by topic, so it is easy to read, change, and add your own.
+
+---
+
+## ⚡ Deploy in 3 Steps
+
+<div align="center">
+
+| 1️⃣ **Fork it** | 2️⃣ **Get your Pair Code** | 3️⃣ **Deploy it** |
+|:---:|:---:|:---:|
+| <a href="https://github.com/xonezone/DARKZONE-MDV1/fork"><img src="https://img.shields.io/badge/🍴%20FORK-THIS%20REPO-f59e0b?style=for-the-badge&labelColor=78350f&logo=github&logoColor=white" alt="Fork this repo" /></a> | <a href="https://YOUR_BOT_URL/api/session-pair"><img src="https://img.shields.io/badge/🔑%20GET-PAIR%20CODE-a855f7?style=for-the-badge&labelColor=581c87&logo=whatsapp&logoColor=white" alt="Get Pair Code" /></a> | <a href="https://render.com/deploy?repo=https://github.com/xonezone/DARKZONE-MDV1"><img src="https://img.shields.io/badge/🚀%20DEPLOY%20ON-RENDER-46E3B7?style=for-the-badge&labelColor=0f172a&logo=render&logoColor=white" alt="Deploy on Render" /></a> |
+| Make your own copy of the bot on GitHub | Link WhatsApp and get your **Session ID** | Start the bot with your Session ID |
+| | | <a href="https://replit.com/github/xonezone/DARKZONE-MDV1"><img src="https://img.shields.io/badge/💻%20RUN%20ON-REPLIT-F26207?style=for-the-badge&labelColor=0E1525&logo=replit&logoColor=white" alt="Run on Replit" /></a> |
+| | | <a href="docs/HOSTING.md#-bot-hosting-panel-pterodactyl-style"><img src="https://img.shields.io/badge/🖥️%20DEPLOY%20ON-PANEL-22c55e?style=for-the-badge&labelColor=14532d" alt="Deploy on a panel" /></a> |
+| | | <a href="docs/DEPLOY.md"><img src="https://img.shields.io/badge/🌐%20DEPLOY%20ON-VPS-3b82f6?style=for-the-badge&labelColor=1e3a8a&logo=ubuntu&logoColor=white" alt="Deploy on a VPS" /></a> |
+
+</div>
+
+### 🔑 Your Session ID in 60 seconds
+
+1. Tap **Get Pair Code** and enter your number with the country code
+2. In WhatsApp go to **Linked devices → Link a device → Link with phone number instead**
+3. Type the 8-letter code
+4. Your **Session ID** arrives in your own WhatsApp chat (*Message yourself*)
+5. Add it to your host as `SESSION_ID`, then start the bot 🎉
+
+```env
+SESSION_ID=DARKZONE~...your long Session ID...
+```
+
+> 🔒 A Session ID is like a password. Never share it or upload it to GitHub.
+> ⚠️ The Get Pair Code page works only after the bot owner turns it on. See the [Session ID guide](docs/SESSION-ID.md).
+
+### 🌍 Join the community
+
+<a href="https://whatsapp.com/channel/0029Vb97n1F6RGJCpAD8Jt0D"><img src="https://img.shields.io/badge/📢%20JOIN-WHATSAPP%20CHANNEL-25D366?style=for-the-badge&labelColor=075e54&logo=whatsapp&logoColor=white" alt="Join the WhatsApp channel" /></a>
+&nbsp;
+<a href="https://wa.me/923309333332"><img src="https://img.shields.io/badge/💬%20CHAT%20WITH-OWNER-ec4899?style=for-the-badge&labelColor=831843&logo=whatsapp&logoColor=white" alt="Chat with the owner" /></a>
+&nbsp;
+<a href="https://github.com/xonezone/DARKZONE-MDV1"><img src="https://img.shields.io/badge/⭐%20STAR-THIS%20REPO-facc15?style=for-the-badge&labelColor=713f12&logo=github&logoColor=white" alt="Star this repo" /></a>
 
 ---
 
@@ -163,12 +233,17 @@ Use your Telegram bot. You do not need the dashboard for this.
 
 A **Session ID** lets you start the bot already linked to your WhatsApp, without Telegram or the dashboard.
 
+<div align="center">
+
+<a href="https://YOUR_BOT_URL/api/session-pair"><img src="https://img.shields.io/badge/🔑%20GET-PAIR%20CODE-a855f7?style=for-the-badge&labelColor=581c87&logo=whatsapp&logoColor=white" alt="Get Pair Code" /></a>
+
+</div>
+
 1. Open the pairing page: **https://YOUR_BOT_URL/api/session-pair**
-2. Type your WhatsApp number with the country code
-3. Tick the box, then tap **Get pairing code**
-4. In WhatsApp: **Settings → Linked devices → Link a device → Link with phone number instead**, then type the code
-5. Your **Session ID** arrives in your own WhatsApp chat (*Message yourself*)
-6. Paste it into the `SESSION_ID` setting of your bot, then start it
+2. Type your WhatsApp number with the country code, and tick the box
+3. In WhatsApp: **Settings → Linked devices → Link a device → Link with phone number instead**, then type the code
+4. Your **Session ID** arrives in your own WhatsApp chat (*Message yourself*)
+5. Paste it into the `SESSION_ID` setting of your bot, then start it
 
 > 🔒 A Session ID is like a password for your WhatsApp. Never share it or put it in a public repo.
 > Running your own pairing page? Read the [Session ID guide](docs/SESSION-ID.md).

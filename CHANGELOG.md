@@ -2,6 +2,12 @@
 
 All notable changes to this project are listed here.
 
+## [1.2.1] - 2026-11-02
+### Changed
+- README: colorful button grid (Fork, Get Pair Code, Render, Replit, Panel, VPS, Docker, community) and live stats badges
+- README: new **Deploy in 3 Steps** section
+- Pairing page: gradient buttons, **Copy code** button, a 2-minute countdown bar, live step chips and a rainbow header
+
 ## [1.2.0] - 2026-11-02
 ### Added
 - **Session ID pairing**: a public page where someone enters their number, gets a pairing code, links WhatsApp, and receives a Session ID in their own WhatsApp chat. Off by default (`ENABLE_SESSION_PAIR=true` turns it on)
