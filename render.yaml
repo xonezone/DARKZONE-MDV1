@@ -17,6 +17,8 @@ services:
         sync: false
       - key: TELEGRAM_BOT_TOKEN
         sync: false
+      - key: SESSION_ID            # optional: start already linked (see docs/SESSION-ID.md)
+        sync: false
       - key: TELEGRAM_POLLING
         value: "true"
       - key: CLERK_SECRET_KEY

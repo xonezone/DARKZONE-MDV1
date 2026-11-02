@@ -2,6 +2,15 @@
 
 All notable changes to this project are listed here.
 
+## [1.2.0] - 2026-11-02
+### Added
+- **Session ID pairing**: a public page where someone enters their number, gets a pairing code, links WhatsApp, and receives a Session ID in their own WhatsApp chat. Off by default (`ENABLE_SESSION_PAIR=true` turns it on)
+- **`SESSION_ID` setting**: the bot starts already linked, with no Telegram or dashboard pairing
+- Limits on the pairing page: tries per visitor per hour and pairings at the same time
+- Guide: `docs/SESSION-ID.md`
+- The Session ID message is retried if the first send fails
+- Starting from a `SESSION_ID` marks the main account active, so a database that saw an earlier logout still reconnects
+
 ## [1.1.1] - 2026-11-01
 ### Fixed
 - Video downloads could send a **broken, cut-off video** when a download stopped halfway. They are now rejected and retried

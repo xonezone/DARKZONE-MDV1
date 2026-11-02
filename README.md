@@ -15,7 +15,7 @@
 [![Stars](https://img.shields.io/github/stars/xonezone/DARKZONE-MDV1?style=social)](https://github.com/xonezone/DARKZONE-MDV1/stargazers)
 [![Forks](https://img.shields.io/github/forks/xonezone/DARKZONE-MDV1?style=social)](https://github.com/xonezone/DARKZONE-MDV1/network/members)
 
-**[✨ Features](#-features) · [📚 Commands](#-command-categories) · [🚀 Quick Start](#-quick-start) · [⚙️ Settings](#%EF%B8%8F-environment-variables) · [☁️ Hosting](#%EF%B8%8F-hosting-options) · [📖 Docs](#-documentation) · [❓ FAQ](#-faq) · [🤝 Support](#-support)**
+**[✨ Features](#-features) · [📚 Commands](#-command-categories) · [🚀 Quick Start](#-quick-start) · [⚙️ Settings](#%EF%B8%8F-environment-variables) · [🔑 Session ID](#-get-a-session-id) · [☁️ Hosting](#%EF%B8%8F-hosting-options) · [📖 Docs](#-documentation) · [❓ FAQ](#-faq) · [🤝 Support](#-support)**
 
 <br/>
 
@@ -52,6 +52,7 @@ You link your WhatsApp once, then run everything from chat or from the dashboard
 | ⏰ | **Scheduling** | Reminders, scheduled statuses and broadcasts. |
 | 🖥️ | **Web Dashboard** | Link WhatsApp, see stats, manage groups, contacts, messages and auto-reply rules. |
 | ✈️ | **Telegram Pairing** | Connect your WhatsApp account through a Telegram bot. |
+| 🔑 | **Session ID** | Get a Session ID from a pairing page, then start the bot already linked. |
 | 🌍 | **Translate and Religion** | Translate text and audio. Quran, Bible, hadith and prayer times. |
 
 ---
@@ -158,6 +159,22 @@ Use your Telegram bot. You do not need the dashboard for this.
 
 ---
 
+## 🔑 Get a Session ID
+
+A **Session ID** lets you start the bot already linked to your WhatsApp, without Telegram or the dashboard.
+
+1. Open the pairing page: **https://YOUR_BOT_URL/api/session-pair**
+2. Type your WhatsApp number with the country code
+3. Tick the box, then tap **Get pairing code**
+4. In WhatsApp: **Settings → Linked devices → Link a device → Link with phone number instead**, then type the code
+5. Your **Session ID** arrives in your own WhatsApp chat (*Message yourself*)
+6. Paste it into the `SESSION_ID` setting of your bot, then start it
+
+> 🔒 A Session ID is like a password for your WhatsApp. Never share it or put it in a public repo.
+> Running your own pairing page? Read the [Session ID guide](docs/SESSION-ID.md).
+
+---
+
 ## ☁️ Hosting Options
 
 Run Dark Zone MD on the host you like.
@@ -203,6 +220,10 @@ Copy these names from `.env.example` and fill in your own values.
 | `AI_INTEGRATIONS_OPENROUTER_API_KEY` | Optional | Turns on OpenRouter models |
 | `AI_INTEGRATIONS_OPENROUTER_BASE_URL` | Optional | OpenRouter API link |
 | `LOG_LEVEL` | Optional | `info`, `debug`, and so on |
+| `SESSION_ID` | Optional | Start already linked to a WhatsApp account |
+| `ENABLE_SESSION_PAIR` | Optional | `true` turns on the public pairing page |
+| `PAIR_MAX_PER_HOUR` | Optional | Tries per visitor per hour (default 3) |
+| `PAIR_MAX_CONCURRENT` | Optional | Pairings at the same time (default 5) |
 | `YTDLP_COOKIES_FILE` | Optional | Path to a `cookies.txt` so Instagram and some YouTube videos work |
 | `YTDLP_PROXY` | Optional | Proxy link, for hosts that YouTube, TikTok or Instagram block |
 
@@ -258,6 +279,7 @@ Then add `"hello"` to the matching list in `menu-data.ts` so it shows in the men
 
 | Guide | What is inside |
 |---|---|
+| 🔑 [Session ID Guide](docs/SESSION-ID.md) | Get a Session ID, run a pairing page, use `SESSION_ID` |
 | ☁️ [Hosting Options](docs/HOSTING.md) | Replit, Render, bot panels, Docker |
 | 🚀 [Setup & Deploy Guide](docs/DEPLOY.md) | Full server setup, ffmpeg, yt-dlp, PM2, updating |
 | 📚 [Command List](docs/COMMANDS.md) | Every command with a short description |

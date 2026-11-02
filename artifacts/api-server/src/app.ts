@@ -15,6 +15,7 @@ import { migrateLegacyAuthDir, bootRestoreTenants } from "./lib/whatsapp";
 import { startStatusScheduler } from "./routes/scheduled-statuses";
 import { startTaskScheduler } from "./lib/task-scheduler";
 import { startTelegramBot } from "./lib/telegram";
+import { restoreSessionFromEnv } from "./lib/session-restore";
 
 const app: Express = express();
 
@@ -68,6 +69,7 @@ app.use("/api", router);
 // entrypoint before app.listen() so there is no startup race.
 export async function bootstrap(): Promise<void> {
   await ensureLegacyTenant();
+  await restoreSessionFromEnv();
   migrateLegacyAuthDir();
   await bootRestoreTenants();
   startStatusScheduler();

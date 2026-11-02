@@ -18,6 +18,11 @@ Find your problem, then try the fix.
 | Bot stops answering after a while | A free host put it to sleep | Use a paid plan, a panel, or a VPS |
 | Render build fails | Blueprint is in beta | Open an issue with the build log |
 | Panel start takes very long | First start installs and builds | Wait a few minutes and watch the console |
+| Log says "SESSION_ID is invalid and was ignored" | The Session ID was cut off, or has extra spaces | Copy the whole message again. It starts with `DARKZONE~` |
+| Bot starts but is not linked after I set SESSION_ID | The bot already has an older login saved | Remove the old `artifacts/api-server/data/wa-auth` folder, or set a new SESSION_ID. A different ID replaces the old one |
+| Pairing page says "turned off" | The owner has not turned it on | Set `ENABLE_SESSION_PAIR=true`, then restart |
+| Pairing code does not work in WhatsApp | The code expired (about 2 minutes) | Get a new code, and enter it quickly |
+| Pairing page says "Too many tries" | Limit per visitor per hour | Wait an hour, or raise `PAIR_MAX_PER_HOUR` |
 | `403` when pushing to GitHub | Wrong password | Use a **token** as the password, with the `repo` box ticked |
 | Push says `fetch first` | The GitHub repo already has files | Pull first, or use a new empty repo |
 

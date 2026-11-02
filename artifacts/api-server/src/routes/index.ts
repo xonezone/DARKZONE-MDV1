@@ -12,11 +12,15 @@ import groupSettingsRouter from "./group-settings";
 import statsRouter from "./stats";
 import { requireAuth, requireTenant } from "../middlewares/auth";
 import capturesRouter from "./captures";
+import sessionPairRouter from "./session-pair";
 
 const router: IRouter = Router();
 
 // Public — no auth.
 router.use(healthRouter);
+
+// Public — "Get a Session ID" pairing page (off unless ENABLE_SESSION_PAIR=true).
+router.use(sessionPairRouter);
 
 // Authenticated, but link to a tenant NOT required (link management itself).
 router.use(linkRouter);

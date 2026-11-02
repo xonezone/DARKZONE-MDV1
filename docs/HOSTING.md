@@ -39,6 +39,8 @@ You do **not** need the dashboard to link. Use your Telegram bot:
 5. Type the code
 6. Send **`.menu`** to your bot. 🎉
 
+**Prefer a Session ID?** Get one from the [pairing page](SESSION-ID.md), paste it into the `SESSION_ID` setting on your host, and the bot starts already linked. No Telegram needed. Read the [Session ID guide](SESSION-ID.md).
+
 Other Telegram commands: `/qr` (link with a QR code), `/disconnect` (unlink), `/link` (code to sign in to the dashboard).
 
 ---

@@ -51,7 +51,7 @@ const workspaceRoot = process.cwd().endsWith(path.join("artifacts", "api-server"
 // its own subdirectory `tenant-<id>/` so sessions never mix.
 const AUTH_ROOT = path.resolve(workspaceRoot, "artifacts/api-server/data/wa-auth");
 
-function authDirFor(tenantId: number): string {
+export function authDirFor(tenantId: number): string {
   return path.join(AUTH_ROOT, `tenant-${tenantId}`);
 }
 
