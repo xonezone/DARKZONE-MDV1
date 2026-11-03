@@ -10,6 +10,7 @@ Pick the place that fits you. All of them run the same bot.
 |---|---|:---:|---|:---:|
 | 🟠 **Replit** | Easiest. Bot and dashboard together | Only with a paid Deployment | Free to try | ⭐ |
 | 🟣 **Render** | Cloud hosting with one click | Only on a paid plan | Paid plan needed | ⭐⭐ |
+| 📱 **Termux** (your phone) | Free, no server needed | Only while the phone stays on | Free | ⭐⭐ |
 | 🟢 **Bot panel** (Pterodactyl style) | Cheap bot hosts | Yes, on most panels | Cheap | ⭐⭐ |
 | 🖥️ **VPS** | Full control | Yes | Paid | ⭐⭐⭐ |
 
@@ -42,6 +43,18 @@ You do **not** need the dashboard to link. Use your Telegram bot:
 **Prefer a Session ID?** Get one from the [pairing page](SESSION-ID.md), paste it into the `SESSION_ID` setting on your host, and the bot starts already linked. No Telegram needed. Read the [Session ID guide](SESSION-ID.md).
 
 Other Telegram commands: `/qr` (link with a QR code), `/disconnect` (unlink), `/link` (code to sign in to the dashboard).
+
+---
+
+## 📱 Termux (your own phone)
+
+Run the bot on an Android phone with one command. Full guide: **[TERMUX.md](TERMUX.md)**.
+
+```bash
+pkg install -y curl && curl -fsSLO https://raw.githubusercontent.com/xonezone/DARKZONE-MDV1/main/termux.sh && bash termux.sh install
+```
+
+It asks for your Telegram bot token, then you link WhatsApp with `/pair` in Telegram.
 
 ---
 

@@ -4,7 +4,7 @@ import { join } from "node:path";
 import { execFile } from "node:child_process";
 import { promisify } from "node:util";
 import { downloadMediaMessage, type WAMessage } from "@whiskeysockets/baileys";
-import sharp from "sharp";
+import sharp from "../../sharp-shim";
 import type { Command, CommandContext } from "../types";
 import { fetchBuffer } from "../http-utils";
 import { isPublicHttpUrl } from "../url-utils";

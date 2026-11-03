@@ -1,7 +1,7 @@
 import { mkdtemp, writeFile, readFile, rm } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
-import sharp from "sharp";
+import sharp from "../../sharp-shim";
 import { Image } from "node-webpmux";
 import type { Command, CommandContext } from "../types";
 import { downloadMedia, hasMedia } from "../media-utils";

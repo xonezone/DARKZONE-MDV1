@@ -25,10 +25,12 @@
 
 <a href="https://github.com/xonezone/DARKZONE-MDV1/fork"><img src="https://img.shields.io/badge/🍴%20FORK-THIS%20REPO-f59e0b?style=for-the-badge&labelColor=78350f&logo=github&logoColor=white" alt="Fork this repo" /></a>
 &nbsp;
-<a href="https://YOUR_BOT_URL/api/session-pair"><img src="https://img.shields.io/badge/🔑%20GET-PAIR%20CODE-a855f7?style=for-the-badge&labelColor=581c87&logo=whatsapp&logoColor=white" alt="Get Pair Code" /></a>
+<a href="docs/HOSTING.md#-linking-whatsapp-works-on-every-host"><img src="https://img.shields.io/badge/🔑%20GET-PAIR%20CODE-a855f7?style=for-the-badge&labelColor=581c87&logo=whatsapp&logoColor=white" alt="Get Pair Code" /></a>
 &nbsp;
 <a href="https://render.com/deploy?repo=https://github.com/xonezone/DARKZONE-MDV1"><img src="https://img.shields.io/badge/🚀%20DEPLOY%20ON-RENDER-46E3B7?style=for-the-badge&labelColor=0f172a&logo=render&logoColor=white" alt="Deploy on Render" /></a>
 
+<a href="docs/TERMUX.md"><img src="https://img.shields.io/badge/📱%20RUN%20ON-TERMUX-14b8a6?style=for-the-badge&labelColor=134e4a&logo=termux&logoColor=white" alt="Run on Termux" /></a>
+&nbsp;
 <a href="https://replit.com/github/xonezone/DARKZONE-MDV1"><img src="https://img.shields.io/badge/💻%20RUN%20ON-REPLIT-F26207?style=for-the-badge&labelColor=0E1525&logo=replit&logoColor=white" alt="Run on Replit" /></a>
 &nbsp;
 <a href="docs/HOSTING.md#-bot-hosting-panel-pterodactyl-style"><img src="https://img.shields.io/badge/🖥️%20DEPLOY%20ON-PANEL-22c55e?style=for-the-badge&labelColor=14532d" alt="Deploy on a panel" /></a>
@@ -74,28 +76,35 @@ You link your WhatsApp once, then run everything from chat or from the dashboard
 
 | 1️⃣ **Fork it** | 2️⃣ **Get your Pair Code** | 3️⃣ **Deploy it** |
 |:---:|:---:|:---:|
-| <a href="https://github.com/xonezone/DARKZONE-MDV1/fork"><img src="https://img.shields.io/badge/🍴%20FORK-THIS%20REPO-f59e0b?style=for-the-badge&labelColor=78350f&logo=github&logoColor=white" alt="Fork this repo" /></a> | <a href="https://YOUR_BOT_URL/api/session-pair"><img src="https://img.shields.io/badge/🔑%20GET-PAIR%20CODE-a855f7?style=for-the-badge&labelColor=581c87&logo=whatsapp&logoColor=white" alt="Get Pair Code" /></a> | <a href="https://render.com/deploy?repo=https://github.com/xonezone/DARKZONE-MDV1"><img src="https://img.shields.io/badge/🚀%20DEPLOY%20ON-RENDER-46E3B7?style=for-the-badge&labelColor=0f172a&logo=render&logoColor=white" alt="Deploy on Render" /></a> |
-| Make your own copy of the bot on GitHub | Link WhatsApp and get your **Session ID** | Start the bot with your Session ID |
+| <a href="https://github.com/xonezone/DARKZONE-MDV1/fork"><img src="https://img.shields.io/badge/🍴%20FORK-THIS%20REPO-f59e0b?style=for-the-badge&labelColor=78350f&logo=github&logoColor=white" alt="Fork this repo" /></a> | <a href="docs/HOSTING.md#-linking-whatsapp-works-on-every-host"><img src="https://img.shields.io/badge/🔑%20GET-PAIR%20CODE-a855f7?style=for-the-badge&labelColor=581c87&logo=whatsapp&logoColor=white" alt="Get Pair Code" /></a> | <a href="https://render.com/deploy?repo=https://github.com/xonezone/DARKZONE-MDV1"><img src="https://img.shields.io/badge/🚀%20DEPLOY%20ON-RENDER-46E3B7?style=for-the-badge&labelColor=0f172a&logo=render&logoColor=white" alt="Deploy on Render" /></a> |
+| Make your own copy of the bot on GitHub | Link WhatsApp from Telegram with `/pair` (or get a **Session ID**) | Start the bot with your Session ID |
+| | | <a href="docs/TERMUX.md"><img src="https://img.shields.io/badge/📱%20RUN%20ON-TERMUX-14b8a6?style=for-the-badge&labelColor=134e4a&logo=termux&logoColor=white" alt="Run on Termux" /></a> |
 | | | <a href="https://replit.com/github/xonezone/DARKZONE-MDV1"><img src="https://img.shields.io/badge/💻%20RUN%20ON-REPLIT-F26207?style=for-the-badge&labelColor=0E1525&logo=replit&logoColor=white" alt="Run on Replit" /></a> |
 | | | <a href="docs/HOSTING.md#-bot-hosting-panel-pterodactyl-style"><img src="https://img.shields.io/badge/🖥️%20DEPLOY%20ON-PANEL-22c55e?style=for-the-badge&labelColor=14532d" alt="Deploy on a panel" /></a> |
 | | | <a href="docs/DEPLOY.md"><img src="https://img.shields.io/badge/🌐%20DEPLOY%20ON-VPS-3b82f6?style=for-the-badge&labelColor=1e3a8a&logo=ubuntu&logoColor=white" alt="Deploy on a VPS" /></a> |
 
 </div>
 
-### 🔑 Your Session ID in 60 seconds
+### 📲 Link WhatsApp in 60 seconds
 
-1. Tap **Get Pair Code** and enter your number with the country code
-2. In WhatsApp go to **Linked devices → Link a device → Link with phone number instead**
-3. Type the 8-letter code
-4. Your **Session ID** arrives in your own WhatsApp chat (*Message yourself*)
-5. Add it to your host as `SESSION_ID`, then start the bot 🎉
+1. Open your bot in **Telegram** and send `/start`
+2. Send `/pair 923001234567` (your own number, with country code, no `+`)
+3. In WhatsApp go to **Linked devices → Link a device → Link with phone number instead**
+4. Type the 8-letter code the bot sends you
+5. Send `.menu` to your bot on WhatsApp 🎉
 
-```env
-SESSION_ID=DARKZONE~...your long Session ID...
+> 🔑 Want a **Session ID** to move the bot to another host? See [Get a Session ID](#-get-a-session-id).
+> 🔒 A Session ID is like a password. Never share it or upload it to GitHub.
+
+### 📱 Run it on your phone (Termux)
+
+One command, then paste your Telegram bot token:
+
+```bash
+pkg install -y curl && curl -fsSLO https://raw.githubusercontent.com/xonezone/DARKZONE-MDV1/main/termux.sh && bash termux.sh install
 ```
 
-> 🔒 A Session ID is like a password. Never share it or upload it to GitHub.
-> ⚠️ The Get Pair Code page works only after the bot owner turns it on. See the [Session ID guide](docs/SESSION-ID.md).
+Full guide: **[docs/TERMUX.md](docs/TERMUX.md)**
 
 ### 🌍 Join the community
 
@@ -235,11 +244,11 @@ A **Session ID** lets you start the bot already linked to your WhatsApp, without
 
 <div align="center">
 
-<a href="https://YOUR_BOT_URL/api/session-pair"><img src="https://img.shields.io/badge/🔑%20GET-PAIR%20CODE-a855f7?style=for-the-badge&labelColor=581c87&logo=whatsapp&logoColor=white" alt="Get Pair Code" /></a>
+<a href="docs/HOSTING.md#-linking-whatsapp-works-on-every-host"><img src="https://img.shields.io/badge/🔑%20GET-PAIR%20CODE-a855f7?style=for-the-badge&labelColor=581c87&logo=whatsapp&logoColor=white" alt="Get Pair Code" /></a>
 
 </div>
 
-1. Open the pairing page: **https://YOUR_BOT_URL/api/session-pair**
+1. Open the bot owner's pairing page (its address ends in `/api/session-pair`). The owner must turn it on and host it online first
 2. Type your WhatsApp number with the country code, and tick the box
 3. In WhatsApp: **Settings → Linked devices → Link a device → Link with phone number instead**, then type the code
 4. Your **Session ID** arrives in your own WhatsApp chat (*Message yourself*)
@@ -267,6 +276,7 @@ Run Dark Zone MD on the host you like.
 | 🟠 **Replit** | Easiest start | [Replit steps](docs/HOSTING.md#-replit) |
 | 🟣 **Render** | One-click cloud (paid plan for 24/7) | [Render steps](docs/HOSTING.md#-render) |
 | 🟢 **Bot panel** | Cheap bot hosts (Pterodactyl style) | [Panel steps](docs/HOSTING.md#-bot-hosting-panel-pterodactyl-style) |
+| 📱 **Termux** | Your own phone, free | [Termux guide](docs/TERMUX.md) |
 | 🖥️ **VPS** | Full control | [Deploy guide](docs/DEPLOY.md) |
 | 🐳 **Docker** | Advanced | [Docker steps](docs/HOSTING.md#-docker-advanced) |
 
@@ -354,6 +364,7 @@ Then add `"hello"` to the matching list in `menu-data.ts` so it shows in the men
 
 | Guide | What is inside |
 |---|---|
+| 📱 [Termux Guide](docs/TERMUX.md) | Run the bot on your Android phone with one command |
 | 🔑 [Session ID Guide](docs/SESSION-ID.md) | Get a Session ID, run a pairing page, use `SESSION_ID` |
 | ☁️ [Hosting Options](docs/HOSTING.md) | Replit, Render, bot panels, Docker |
 | 🚀 [Setup & Deploy Guide](docs/DEPLOY.md) | Full server setup, ffmpeg, yt-dlp, PM2, updating |

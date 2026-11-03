@@ -2,6 +2,17 @@
 
 All notable changes to this project are listed here.
 
+## [1.3.0] - 2026-11-02
+### Added
+- **Termux installer** (`termux.sh`): one command installs everything on an Android phone, asks for the Telegram token, and starts the bot. Includes `darkzone start | stop | restart | status | logs | token | update`
+- Termux guide: `docs/TERMUX.md`
+- Safe image loader: the bot now starts even when `sharp` cannot load. Only image commands report that they are unavailable
+
+### Changed
+- The dashboard login is optional. Without Clerk keys the bot, Telegram pairing and the Session ID page still work, instead of every web request failing
+- README: the "Get Pair Code" buttons now open the Telegram pairing steps instead of a placeholder address
+- README and hosting guide: Termux added
+
 ## [1.2.1] - 2026-11-02
 ### Changed
 - README: colorful button grid (Fork, Get Pair Code, Render, Replit, Panel, VPS, Docker, community) and live stats badges

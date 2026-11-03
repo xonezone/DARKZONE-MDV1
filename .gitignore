@@ -69,3 +69,8 @@ artifacts/api-server/bin/
 
 # yt-dlp login cookies - NEVER upload these
 cookies*.txt
+
+# Termux runtime files
+bot.log
+bot.log.old
+bot.pid

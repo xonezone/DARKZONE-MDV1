@@ -1,5 +1,5 @@
 import { downloadMediaMessage } from "@whiskeysockets/baileys";
-import sharp from "sharp";
+import sharp from "../../sharp-shim";
 import type { Command, CommandContext } from "../types";
 import { gemini, GEMINI_MODEL } from "@workspace/integrations-gemini";
 import { speechToText } from "@workspace/integrations-openai-ai-server/audio";

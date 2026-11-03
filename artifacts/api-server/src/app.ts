@@ -16,6 +16,7 @@ import { startStatusScheduler } from "./routes/scheduled-statuses";
 import { startTaskScheduler } from "./lib/task-scheduler";
 import { startTelegramBot } from "./lib/telegram";
 import { restoreSessionFromEnv } from "./lib/session-restore";
+import { isClerkConfigured } from "./lib/clerk-config";
 
 const app: Express = express();
 
@@ -50,14 +51,20 @@ app.use(express.urlencoded({ extended: true }));
 // Resolve the publishable key from the incoming request host so the same
 // server can serve multiple Clerk custom domains. Falls back to
 // CLERK_PUBLISHABLE_KEY when the host doesn't map to a custom domain.
-app.use(
-  clerkMiddleware((req) => ({
-    publishableKey: publishableKeyFromHost(
-      getClerkProxyHost(req) ?? "",
-      process.env.CLERK_PUBLISHABLE_KEY,
-    ),
-  })),
-);
+if (isClerkConfigured()) {
+  app.use(
+    clerkMiddleware((req) => ({
+      publishableKey: publishableKeyFromHost(
+        getClerkProxyHost(req) ?? "",
+        process.env.CLERK_PUBLISHABLE_KEY,
+      ),
+    })),
+  );
+} else {
+  logger.warn(
+    "CLERK_PUBLISHABLE_KEY / CLERK_SECRET_KEY not set: dashboard login is off. The bot, Telegram pairing and the Session ID page still work.",
+  );
+}
 
 app.use("/api", router);
 

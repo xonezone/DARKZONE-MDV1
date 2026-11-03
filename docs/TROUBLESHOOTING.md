@@ -23,6 +23,10 @@ Find your problem, then try the fix.
 | Pairing page says "turned off" | The owner has not turned it on | Set `ENABLE_SESSION_PAIR=true`, then restart |
 | Pairing code does not work in WhatsApp | The code expired (about 2 minutes) | Get a new code, and enter it quickly |
 | Pairing page says "Too many tries" | Limit per visitor per hour | Wait an hour, or raise `PAIR_MAX_PER_HOUR` |
+| The "Get Pair Code" button opens a page that cannot be reached | Old links pointed to a placeholder address | Use Telegram `/pair`. See [Linking WhatsApp](HOSTING.md#-linking-whatsapp-works-on-every-host) |
+| Termux install fails or the bot will not start | See the Termux table | [Termux guide, Problems](TERMUX.md#%EF%B8%8F-problems) |
+| Log says "sharp could not be loaded" | The image library cannot run on this device (common on Android) | The bot still works. Only image and sticker commands are off |
+| Dashboard says "Dashboard login is not set up" | No Clerk keys are set | Add `CLERK_PUBLISHABLE_KEY` and `CLERK_SECRET_KEY`, or ignore it if you only use WhatsApp and Telegram |
 | `403` when pushing to GitHub | Wrong password | Use a **token** as the password, with the `repo` box ticked |
 | Push says `fetch first` | The GitHub repo already has files | Pull first, or use a new empty repo |
 

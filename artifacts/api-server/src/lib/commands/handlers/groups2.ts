@@ -1,4 +1,4 @@
-import sharp from "sharp";
+import sharp from "../../sharp-shim";
 import type { Command, CommandContext } from "../types";
 import { setConfig, getConfig } from "../../config";
 import { getGroupMetadataCached, jidBase } from "../../group-meta";

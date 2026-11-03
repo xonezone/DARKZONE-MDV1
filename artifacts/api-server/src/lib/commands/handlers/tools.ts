@@ -1,6 +1,6 @@
 import QRCode from "qrcode";
 import jsQR from "jsqr";
-import sharp from "sharp";
+import sharp from "../../sharp-shim";
 import type { Command } from "../types";
 import { downloadMedia, hasMedia } from "../media-utils";
 import { fancyAll, flipText, toMorse, toBinary, genPassword } from "../text-utils";

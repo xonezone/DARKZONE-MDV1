@@ -1,6 +1,7 @@
 import type { RequestHandler } from "express";
 import { getAuth } from "@clerk/express";
 import { getTenantForClerkUser } from "@workspace/db";
+import { isClerkConfigured } from "../lib/clerk-config";
 
 declare global {
   // eslint-disable-next-line @typescript-eslint/no-namespace
@@ -23,6 +24,10 @@ declare global {
  * tenant — used for the link endpoints where the user has no tenant yet.
  */
 export const requireAuth: RequestHandler = (req, res, next) => {
+  if (!isClerkConfigured()) {
+    res.status(503).json({ error: "Dashboard login is not set up on this server." });
+    return;
+  }
   const auth = getAuth(req);
   const userId = auth?.userId;
   if (!userId) {
