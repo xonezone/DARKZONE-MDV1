@@ -2,6 +2,16 @@
 
 All notable changes to this project are listed here.
 
+## [1.4.0] - 2026-11-04
+### Added
+- **Pairing page** (`pair/`): a stand-alone web page that gets a WhatsApp pairing code and Session ID. Host it free on GitHub Pages or any static host
+- **Pairing server** (`pair-server`): a small server that needs no database, Telegram or Clerk, so it can run on Render's free plan
+- `Dockerfile.pair` and `render-pair.yaml` for the pairing server
+- `PAIR_ALLOWED_ORIGINS` setting: only listed page addresses may use the server from a browser. `*` is not accepted
+- The page tells people when a free server is waking up, and retries for about 90 seconds
+- Guide: `docs/PAIR-PAGE.md`
+- `.nojekyll` so GitHub Pages serves the page as it is
+
 ## [1.3.0] - 2026-11-02
 ### Added
 - **Termux installer** (`termux.sh`): one command installs everything on an Android phone, asks for the Telegram token, and starts the bot. Includes `darkzone start | stop | restart | status | logs | token | update`

@@ -1,6 +1,7 @@
 import { Router, type IRouter, type Request, type Response } from "express";
 import { logger } from "../lib/logger";
 import { createRateLimiter, getPairManager, PairError } from "../lib/session-pair";
+import { applyCors } from "../lib/pair-cors";
 
 /**
  * Public "Get a Session ID" pairing page.
@@ -16,6 +17,12 @@ import { createRateLimiter, getPairManager, PairError } from "../lib/session-pai
  * server briefly handles the visitor's WhatsApp login.
  */
 const router: IRouter = Router();
+
+// Let a pairing page hosted elsewhere call this API (only origins in PAIR_ALLOWED_ORIGINS).
+router.use("/session-pair", (req, res, next) => {
+  if (applyCors(req, res)) return;
+  next();
+});
 
 const perHour = Number(process.env.PAIR_MAX_PER_HOUR);
 const limiter = createRateLimiter(Number.isFinite(perHour) && perHour > 0 ? perHour : 3, 60 * 60_000);
@@ -182,7 +189,7 @@ const PAGE = `<!doctype html>
 </main>
 <script>
 (function(){
-  var base = location.pathname.replace(/\\/+$/, "");
+  var base = (typeof window !== "undefined" && window.PAIR_API ? String(window.PAIR_API) : location.pathname).replace(/\\/+$/, "");
   var $ = function(id){ return document.getElementById(id); };
   var num=$("num"), ok=$("ok"), go=$("go"), msg=$("msg"), code=$("code"), digits=$("digits"),
       copy=$("copy"), left=$("left"), fill=$("barfill"), poller=null, ticker=null, raw="";
@@ -194,9 +201,25 @@ const PAGE = `<!doctype html>
   function fmt(s){ var m=Math.floor(s/60), r=s%60; return m + ":" + (r<10 ? "0" : "") + r; }
   num.addEventListener("input", refresh); ok.addEventListener("change", refresh);
 
-  fetch(base + "/status").then(function(r){return r.json()}).then(function(j){
-    if (!j.enabled) { $("form").style.display="none"; $("off").style.display="block"; }
-  }).catch(function(){});
+  // A free host can be asleep. Ask it to wake up and keep trying for about 90 seconds.
+  var wake = 0;
+  function boot(){
+    if (/YOUR-PAIR-SERVER/.test(base)) {
+      $("form").style.display = "none";
+      show("err", "This page is not set up yet. The owner must put the pairing server address in config.js.");
+      return;
+    }
+    if (wake === 0) show("info", "Connecting to the pairing server...");
+    fetch(base + "/status").then(function(r){return r.json()}).then(function(j){
+      msg.className = "msg";
+      if (!j.enabled) { $("form").style.display="none"; $("off").style.display="block"; }
+    }).catch(function(){
+      wake++;
+      if (wake < 18) { show("info", "The server is waking up. This can take up to a minute..."); setTimeout(boot, 5000); }
+      else show("err", "The pairing server is not answering. Please try again later.");
+    });
+  }
+  boot();
 
   function countdown(){
     var total = 120, t = total;
@@ -253,7 +276,7 @@ const PAGE = `<!doctype html>
       $("form").style.display = "none"; code.style.display = "block"; step(2);
       show("info", "Waiting for you to enter the code in WhatsApp...");
       poll(res.j.id); countdown();
-    }).catch(function(){ show("err", "Could not reach the server."); go.disabled=false; });
+    }).catch(function(){ show("err", "Could not reach the server. It may be waking up. Wait a minute and try again."); go.disabled=false; });
   });
 })();
 </script>

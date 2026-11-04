@@ -1,0 +1,21 @@
+# Dark Zone MD - pairing server for Render's FREE plan (BETA).
+# Easiest way: create the Web Service by hand (see docs/PAIR-PAGE.md).
+# This file is the same setup written down, for people who like Blueprints.
+services:
+  - type: web
+    name: dark-zone-pair
+    runtime: docker
+    plan: free
+    dockerfilePath: ./Dockerfile.pair
+    healthCheckPath: /healthz
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: ENABLE_SESSION_PAIR
+        value: "true"
+      - key: PAIR_ALLOWED_ORIGINS      # the address of your pairing PAGE, for example https://yourname.github.io
+        sync: false
+      - key: PAIR_MAX_CONCURRENT
+        value: "3"
+      - key: PAIR_MAX_PER_HOUR
+        value: "5"

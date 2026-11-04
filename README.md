@@ -255,7 +255,7 @@ A **Session ID** lets you start the bot already linked to your WhatsApp, without
 5. Paste it into the `SESSION_ID` setting of your bot, then start it
 
 > 🔒 A Session ID is like a password for your WhatsApp. Never share it or put it in a public repo.
-> Running your own pairing page? Read the [Session ID guide](docs/SESSION-ID.md).
+> Running your own pairing page? Read the [Session ID guide](docs/SESSION-ID.md), or the [Pairing Page guide](docs/PAIR-PAGE.md) to host one for free.
 
 ---
 
@@ -364,6 +364,7 @@ Then add `"hello"` to the matching list in `menu-data.ts` so it shows in the men
 
 | Guide | What is inside |
 |---|---|
+| 🌐 [Pairing Page Guide](docs/PAIR-PAGE.md) | Get pairing codes on a website, free |
 | 📱 [Termux Guide](docs/TERMUX.md) | Run the bot on your Android phone with one command |
 | 🔑 [Session ID Guide](docs/SESSION-ID.md) | Get a Session ID, run a pairing page, use `SESSION_ID` |
 | ☁️ [Hosting Options](docs/HOSTING.md) | Replit, Render, bot panels, Docker |

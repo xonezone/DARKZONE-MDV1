@@ -14,8 +14,10 @@ async function buildAll() {
   const distDir = path.resolve(artifactDir, "dist");
   await rm(distDir, { recursive: true, force: true });
 
+  // The bot itself, then the small stand-alone pairing server (no database needed).
+  for (const entry of ["src/index.ts", "src/pair-server.ts"]) {
   await esbuild({
-    entryPoints: [path.resolve(artifactDir, "src/index.ts")],
+    entryPoints: [path.resolve(artifactDir, entry)],
     platform: "node",
     bundle: true,
     format: "esm",
@@ -119,6 +121,7 @@ globalThis.__dirname = __bannerPath.dirname(globalThis.__filename);
     `,
     },
   });
+  }
 }
 
 buildAll().catch((err) => {
